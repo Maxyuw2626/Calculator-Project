@@ -1,0 +1,366 @@
+/* =============================================
+   Premium Calculator — Style Sheet
+   Inspired by Apple, Linear, and Vercel aesthetics
+   ============================================= */
+
+/* ----- Reset & Base ----- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* ---- Color Palette ---- */
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121c;
+  --bg-calculator: rgba(18, 18, 28, 0.75);
+  --bg-button-number: rgba(255, 255, 255, 0.06);
+  --bg-button-number-hover: rgba(255, 255, 255, 0.10);
+  --bg-button-function: rgba(255, 255, 255, 0.04);
+  --bg-button-function-hover: rgba(255, 255, 255, 0.08);
+  --bg-button-operator: rgba(245, 158, 11, 0.12);
+  --bg-button-operator-hover: rgba(245, 158, 11, 0.20);
+  --bg-button-equals: #f59e0b;
+  --bg-button-equals-hover: #fbbf24;
+
+  --text-primary: #f1f5f9;
+  --text-secondary: rgba(241, 245, 249, 0.55);
+  --text-operator: #f59e0b;
+  --text-equals: #0a0a0f;
+  --text-expression: rgba(241, 245, 249, 0.40);
+
+  --border-glass: rgba(255, 255, 255, 0.06);
+  --border-button: rgba(255, 255, 255, 0.04);
+
+  --shadow-calculator: 0 25px 60px rgba(0, 0, 0, 0.60),
+                        0 0 0 1px rgba(255, 255, 255, 0.04);
+  --shadow-button: 0 1px 2px rgba(0, 0, 0, 0.30);
+  --shadow-button-pressed: 0 0px 1px rgba(0, 0, 0, 0.40);
+  --shadow-equals: 0 4px 18px rgba(245, 158, 11, 0.30);
+
+  --radius-calculator: 22px;
+  --radius-button: 14px;
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --transition-fast: 120ms cubic-bezier(0.32, 0.72, 0, 1);
+  --transition-smooth: 200ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-primary);
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% -20%, rgba(245, 158, 11, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 80% 100%, rgba(245, 158, 11, 0.03) 0%, transparent 70%);
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  color: var(--text-primary);
+}
+
+/* ----- Calculator Shell ----- */
+.calculator {
+  width: 100%;
+  max-width: 360px;
+  background: var(--bg-calculator);
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-calculator);
+  box-shadow: var(--shadow-calculator);
+  padding: 1.5rem;
+  user-select: none;
+  animation: calculator-enter 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes calculator-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ----- Display Area ----- */
+.calculator__display {
+  padding: 0.25rem 0 1.5rem;
+  overflow: hidden;
+}
+
+.calculator__expression {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.375rem;
+  min-height: 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--text-expression);
+  letter-spacing: 0.01em;
+  overflow: hidden;
+  transition: opacity var(--transition-smooth);
+}
+
+.calculator__expression span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.calculator__result {
+  text-align: right;
+  font-size: 3.25rem;
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: font-size var(--transition-smooth);
+}
+
+.calculator__result--animate {
+  animation: result-pop 200ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes result-pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* ---- Delete Button (display area) ---- */
+.btn--delete {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  color: var(--text-expression);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast),
+    transform var(--transition-fast);
+  outline: none;
+  padding: 0;
+}
+
+.btn--delete:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.btn--delete:active {
+  transform: scale(0.88);
+}
+
+.btn--delete:focus-visible {
+  box-shadow: 0 0 0 2px var(--bg-primary), 0 0 0 4px rgba(245, 158, 11, 0.50);
+}
+
+/* ----- Button Grid ----- */
+.calculator__buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.625rem;
+}
+
+/* ----- Shared Button Styles ----- */
+.btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3.5rem;
+  border: none;
+  border-radius: var(--radius-button);
+  font-family: var(--font-sans);
+  font-size: 1.375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.btn:focus-visible {
+  box-shadow: 0 0 0 2px var(--bg-primary), 0 0 0 4px rgba(245, 158, 11, 0.50);
+}
+
+/* ---- Number Buttons ---- */
+.btn--number {
+  background: var(--bg-button-number);
+  color: var(--text-primary);
+  border: 1px solid var(--border-button);
+  box-shadow: var(--shadow-button);
+}
+
+.btn--number:hover {
+  background: var(--bg-button-number-hover);
+}
+
+.btn--number:active {
+  transform: scale(0.94);
+  box-shadow: var(--shadow-button-pressed);
+}
+
+/* ---- Function Buttons ---- */
+.btn--function {
+  background: var(--bg-button-function);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-button);
+  box-shadow: var(--shadow-button);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.btn--function:hover {
+  background: var(--bg-button-function-hover);
+  color: var(--text-primary);
+}
+
+.btn--function:active {
+  transform: scale(0.94);
+  box-shadow: var(--shadow-button-pressed);
+}
+
+/* ---- Operator Buttons ---- */
+.btn--operator {
+  background: var(--bg-button-operator);
+  color: var(--text-operator);
+  border: 1px solid rgba(245, 158, 11, 0.10);
+  box-shadow: var(--shadow-button);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.btn--operator:hover {
+  background: var(--bg-button-operator-hover);
+}
+
+.btn--operator:active {
+  transform: scale(0.94);
+  box-shadow: var(--shadow-button-pressed);
+}
+
+/* active operator state (when it is selected) */
+.btn--operator.active {
+  background: rgba(245, 158, 11, 0.25);
+  box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.25);
+}
+
+/* ---- Equals Button ---- */
+.btn--equals {
+  background: var(--bg-button-equals);
+  color: var(--text-equals);
+  box-shadow: var(--shadow-equals), var(--shadow-button);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.btn--equals:hover {
+  background: var(--bg-button-equals-hover);
+  box-shadow: 0 6px 24px rgba(245, 158, 11, 0.40), var(--shadow-button);
+}
+
+.btn--equals:active {
+  transform: scale(0.94);
+  box-shadow: 0 2px 10px rgba(245, 158, 11, 0.25), var(--shadow-button-pressed);
+}
+
+/* ---- Span 2 Columns (zero button) ---- */
+.btn--span-two {
+  grid-column: span 2;
+}
+
+/* ---- Button press ripple (JS-driven) ---- */
+.btn--ripple {
+  animation: btn-press 200ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes btn-press {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+
+/* ----- Responsive ----- */
+
+/* Tablet & small desktop */
+@media (min-width: 480px) {
+  .calculator {
+    max-width: 380px;
+    padding: 1.75rem;
+  }
+
+  .calculator__result {
+    font-size: 3.75rem;
+  }
+
+  .btn {
+    height: 3.75rem;
+    font-size: 1.5rem;
+  }
+
+  .btn--function {
+    font-size: 1.125rem;
+  }
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+  .calculator {
+    max-width: 400px;
+    padding: 2rem;
+    border-radius: 26px;
+  }
+
+  .calculator__result {
+    font-size: 4rem;
+  }
+
+  .calculator__buttons {
+    gap: 0.75rem;
+  }
+
+  .btn {
+    height: 4rem;
+    border-radius: 16px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
